@@ -11,7 +11,7 @@ public class GameObjectExample : MonoBehaviour {
 	public GameObjectList list;
 
 	[System.Serializable]
-	public class GameObjectList : ReorderableArray<GameObject> {
+	public class GameObjectList : ReorderableList<GameObject> {
 	}
 
 	private void Update() {

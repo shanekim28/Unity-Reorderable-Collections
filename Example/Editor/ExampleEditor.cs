@@ -8,19 +8,18 @@ using System;
 [CustomEditor(typeof(Example))]
 public class ExampleEditor : Editor {
 	
-	private ReorderableList list1;
+	private ReorderableCollection list1;
 	private SerializedProperty list2;
-	private ReorderableList list3;
+	private ReorderableCollection list3;
 
 	void OnEnable() {
 
-		list1 = new ReorderableList(serializedObject.FindProperty("list1"));
-		list1.elementNameProperty = "myEnum";
+		list1 = new ReorderableCollection(serializedObject.FindProperty("list1")) {elementNameProperty = "myEnum"};
 
 		list2 = serializedObject.FindProperty("list2");
 
-		list3 = new ReorderableList(serializedObject.FindProperty("list3"));
-		list3.getElementNameCallback += GetList3ElementName;
+		list3 = new ReorderableCollection(serializedObject.FindProperty("list3"));
+		list3.GetElementNameCallback += GetList3ElementName;
 	}
 
 	private string GetList3ElementName(SerializedProperty element) {

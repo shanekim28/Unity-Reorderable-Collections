@@ -35,14 +35,14 @@ public class NameOverrideEditor : Editor {
 		//dynamically change the names of the elements
 
 		UpdateElementNames(dynamicList, nameOverride);
-		UpdateNestedElementNames(dynamicList.FindPropertyRelative("array"), nestedNameOverride);
+		UpdateNestedElementNames(dynamicList.FindPropertyRelative("items"), nestedNameOverride);
 
 		serializedObject.ApplyModifiedProperties();
 	}
 
 	private void UpdateNestedElementNames(SerializedProperty array, SerializedProperty nameOverride) {
 
-		for (int i = 0; i < array.arraySize; i++) {
+		for (var i = 0; i < array.arraySize; i++) {
 
 			UpdateElementNames(array.GetArrayElementAtIndex(i).FindPropertyRelative("nested"), nameOverride);
 		}
@@ -50,10 +50,9 @@ public class NameOverrideEditor : Editor {
 
 	private void UpdateElementNames(SerializedProperty listProperty, SerializedProperty nameOverride) {
 
-		ReorderableList list = ReorderableDrawer.GetList(listProperty, ReorderableDrawer.ARRAY_PROPERTY_NAME);
+		var list = ReorderableAttributeDrawer.GetDrawableCollection(listProperty, ReorderableAttributeDrawer.DefaultBackingListName);
 
 		if (list != null) {
-
 			list.elementNameOverride = nameOverride.stringValue;
 		}
 	}

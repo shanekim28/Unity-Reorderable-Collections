@@ -7,15 +7,16 @@ using Malee.Editor;
 [CustomEditor(typeof(SurrogateTest))]
 public class SurrogateTestEditor : Editor {
 
-	private ReorderableList list;
+	private ReorderableCollection collection;
 	private SerializedProperty myClassArray;
 
 	private void OnEnable() {
 
 		//custom list with more complex surrogate functionalty
 
-		list = new ReorderableList(serializedObject.FindProperty("objects"));
-		list.surrogate = new ReorderableList.Surrogate(typeof(GameObject), AppendObject);
+		collection = new ReorderableCollection(serializedObject.FindProperty("objects")) {
+			surrogate = new ReorderableCollection.Surrogate(typeof(GameObject), AppendObject)
+		};
 
 		//myClassArray uses an auto surrogate property on the "ReorderableAttribute"
 		//it's limited to only setting a property field to the dragged object reference. Still handy!
@@ -29,13 +30,13 @@ public class SurrogateTestEditor : Editor {
 
 		serializedObject.Update();
 
-		list.DoLayoutList();
+		collection.DoLayoutList();
 		EditorGUILayout.PropertyField(myClassArray);
 
 		serializedObject.ApplyModifiedProperties();
 	}
 
-	private void AppendObject(SerializedProperty element, Object objectReference, ReorderableList list) {
+	private void AppendObject(SerializedProperty element, Object objectReference, ReorderableCollection collection) {
 
 		//we can do more with a custom surrogate delegate :)
 

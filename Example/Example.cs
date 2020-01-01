@@ -38,14 +38,14 @@ public class Example : MonoBehaviour {
 	}
 
 	[System.Serializable]
-	public class ExampleChildList : ReorderableArray<ExampleChild> {
+	public class ExampleChildList : ReorderableList<ExampleChild> {
 	}
 
 	[System.Serializable]
-	public class StringList : ReorderableArray<string> {
+	public class StringList : ReorderableList<string> {
 	}
 
 	[System.Serializable]
-	public class VectorList : ReorderableArray<Vector4> {
+	public class VectorList : ReorderableList<Vector4> {
 	}
 }

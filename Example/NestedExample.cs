@@ -29,10 +29,10 @@ public class NestedExample : MonoBehaviour {
 	}
 
 	[System.Serializable]
-	public class ExampleChildList : ReorderableArray<ExampleChild> {
+	public class ExampleChildList : ReorderableList<ExampleChild> {
 	}
 
 	[System.Serializable]
-	public class NestedChildList : ReorderableArray<NestedChildCustomDrawer> {
+	public class NestedChildList : ReorderableList<NestedChildCustomDrawer> {
 	}
 }

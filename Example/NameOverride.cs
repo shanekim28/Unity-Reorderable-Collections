@@ -29,14 +29,14 @@ public class NameOverride : MonoBehaviour {
 	}
 
 	[System.Serializable]
-	public class ExampleChildList : ReorderableArray<ExampleChild> {
+	public class ExampleChildList : ReorderableList<ExampleChild> {
 	}
 
 	[System.Serializable]
-	public class DynamicExampleChildList : ReorderableArray<DynamicExampleChild> {
+	public class DynamicExampleChildList : ReorderableList<DynamicExampleChild> {
 	}
 
 	[System.Serializable]
-	public class StringList : ReorderableArray<string> {
+	public class StringList : ReorderableList<string> {
 	}
 }
