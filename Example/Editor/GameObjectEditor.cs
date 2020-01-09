@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
 
-[CustomEditor(typeof(GameObjectExample))]
-public class GameObjectEditor : Editor {
-
-	
+namespace ZeroVector.Common.Reorderable.Editor {
+    [CustomEditor(typeof(GameObjectExample))]
+    public class GameObjectEditor : UnityEditor.Editor { }
 }

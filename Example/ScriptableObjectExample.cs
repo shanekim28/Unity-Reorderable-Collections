@@ -1,30 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using Malee;
 
-[CreateAssetMenu(fileName = "New ScriptableObject Example", menuName = "ScriptableObject Example")]
-public class ScriptableObjectExample : ScriptableObject {
+// ReSharper disable StringLiteralTypo, IdentifierTypo, InconsistentNaming
+namespace ZeroVector.Common.Reorderable {
+    [CreateAssetMenu(fileName = "New ScriptableObject Example", menuName = "ScriptableObject Example")]
+    public class ScriptableObjectExample : ScriptableObject {
+        
 
-	// [SerializeField, Reorderable(paginate = true, pageSize = 0, elementNameProperty = "myString")]
-	// private MyList list;
+        [SerializeField] // [Reorderable(paginate = true, pageSize = 0, elementNameProperty = "myString")]
+        private MyList list;
 
-	[Space, Reorderable(singleLine = true)] public MyDict dict;
-	
-	[System.Serializable]
-	private struct MyObject {
+        [Space]
+        public MyDict dict;
 
-		public bool myBool;
-		public float myValue;
-		public string myString;
-	}
+        [Serializable]
+        private struct MyObject {
+            #pragma warning disable 649
+            public bool myBool;
+            public float myValue;
+            public string myString;
+            #pragma warning restore 649 
+        }
 
-	[System.Serializable]
-	private class MyList : ReorderableList<MyObject> {
-	}
-	
-	[System.Serializable]
-	public class MyDict : ReorderableDictionary<string, int> {}
-	
-	
+        [Serializable]
+        private class MyList : ReorderableList<MyObject> { }
+
+        [Serializable]
+        public class MyDict : ReorderableDictionary<float, string, MyDictKVP> {
+            public override float DeduplicateKey(float duplicateKey) {
+                return duplicateKey + 0.1f;
+            }
+        }
+
+
+        [Serializable]
+        public class MyDictKVP : ReorderableDictionary<float, string, MyDictKVP>.KeyValuePair { }
+    }
 }

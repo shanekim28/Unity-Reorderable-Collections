@@ -1,38 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Malee;
+﻿using UnityEngine;
 
-public class NestedExample : MonoBehaviour {
+namespace ZeroVector.Common.Reorderable {
+    public class NestedExample : MonoBehaviour {
+        [Reorderable] public ExampleChildList list;
 
-	[Reorderable]
-	public ExampleChildList list;
+        [System.Serializable]
+        public class ExampleChild {
+            [Reorderable(singleLine = true)] public NestedChildList nested;
+        }
 
-	[System.Serializable]
-	public class ExampleChild {
+        [System.Serializable]
+        public class NestedChild {
+            public float myValue;
+        }
 
-		[Reorderable(singleLine = true)]
-		public NestedChildList nested;
-	}
+        [System.Serializable]
+        public class NestedChildCustomDrawer {
+            public bool myBool;
+            public GameObject myGameObject;
+        }
 
-	[System.Serializable]
-	public class NestedChild {
+        [System.Serializable]
+        public class ExampleChildList : ReorderableList<ExampleChild> { }
 
-		public float myValue;
-	}
-
-	[System.Serializable]
-	public class NestedChildCustomDrawer {
-
-		public bool myBool;
-		public GameObject myGameObject;
-	}
-
-	[System.Serializable]
-	public class ExampleChildList : ReorderableList<ExampleChild> {
-	}
-
-	[System.Serializable]
-	public class NestedChildList : ReorderableList<NestedChildCustomDrawer> {
-	}
+        [System.Serializable]
+        public class NestedChildList : ReorderableList<NestedChildCustomDrawer> { }
+    }
 }

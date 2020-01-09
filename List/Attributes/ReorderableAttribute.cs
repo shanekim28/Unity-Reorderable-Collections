@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-namespace Malee {
+namespace ZeroVector.Common.Reorderable {
 
 	public class ReorderableAttribute : PropertyAttribute {
 

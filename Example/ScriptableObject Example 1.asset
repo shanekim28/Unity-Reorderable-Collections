@@ -12,9 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d42752ae62b22b47aef2032ceee5689, type: 3}
   m_Name: ScriptableObject Example 1
   m_EditorClassIdentifier: 
-  dict:
-    serialisedKeys: []
-    serialisedVals: 
+  list:
     items:
-    - 
-    - srt
+    - myBool: 0
+      myValue: 0
+      myString: 
+  dict:
+    items:
+    - Key: 0
+      Value: 
+    - Key: 0.1
+      Value: 
+    - Key: 0.2
+      Value: 
+    - Key: 0.3
+      Value: 

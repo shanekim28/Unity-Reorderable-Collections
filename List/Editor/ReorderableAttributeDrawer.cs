@@ -3,24 +3,27 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace Malee.Editor {
-    [CustomPropertyDrawer(typeof(ReorderableAttribute))]
+namespace ZeroVector.Common.Reorderable.Editor {
+
+    //[CustomPropertyDrawer(typeof(ReorderableAttribute))]
+    [CustomPropertyDrawer(typeof(Internal.BaseReorderableCollection), true)]
     public class ReorderableAttributeDrawer : PropertyDrawer {
-        public const string DefaultBackingListName = "items";
+        private const string DefaultBackingListName = "items";
 
         private static readonly Dictionary<int, ReorderableCollection> Lists = new Dictionary<int, ReorderableCollection>();
 
         public override bool CanCacheInspectorGUI(SerializedProperty property) {
+            ;
             return false;
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
-            var collection = GetDrawableCollection(property, attribute as ReorderableAttribute, DefaultBackingListName);
+            var collection = GetDrawableCollection(property, attribute as ReorderableAttribute);
             return collection?.GetHeight() ?? EditorGUIUtility.singleLineHeight;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-            var collection = GetDrawableCollection(property, attribute as ReorderableAttribute, DefaultBackingListName);
+            var collection = GetDrawableCollection(property, attribute as ReorderableAttribute);
 
             if (collection != null) {
                 // fix nested drawers
@@ -35,7 +38,7 @@ namespace Malee.Editor {
                 EditorGUIUtility.hierarchyMode = mode;
             }
             else {
-                GUI.Label(position, "Collection must extend ReorderableList/Dictionary.", EditorStyles.label);
+                GUI.Label(position, "Collection must extend BaseReorderableCollection.", EditorStyles.label);
             }
         }
 
@@ -47,23 +50,32 @@ namespace Malee.Editor {
             return ((h1 << 5) + h1) ^ h2;
         }
 
-        public static ReorderableCollection GetDrawableCollection(SerializedProperty property, string backingListName) {
-            return GetDrawableCollection(property, null, GetListId(property), backingListName);
-        }
-
-        public static ReorderableCollection GetDrawableCollection(SerializedProperty property, ReorderableAttribute attrib, string backingListName) {
-            return GetDrawableCollection(property, attrib, GetListId(property), backingListName);
-        }
-
-        public static ReorderableCollection GetDrawableCollection(SerializedProperty property, int id, string backingListName) {
-            return GetDrawableCollection(property, null, id, backingListName);
-        }
+        // public static ReorderableCollection GetDrawableCollection(SerializedProperty property, string backingListName) {
+        //     return GetDrawableCollection(property, null, GetListId(property), backingListName);
+        // }
+        //
+        // public static ReorderableCollection GetDrawableCollection(SerializedProperty property, ReorderableAttribute attrib, string backingListName) {
+        //     return GetDrawableCollection(property, attrib, GetListId(property), backingListName);
+        // }
+        //
+        // public static ReorderableCollection GetDrawableCollection(SerializedProperty property, int id, string backingListName) {
+        //     return GetDrawableCollection(property, null, id, backingListName);
+        // }
 
         
-        public static ReorderableCollection GetDrawableCollection(SerializedProperty property, ReorderableAttribute attrib, int id, string backingListName) {
+        public static ReorderableCollection GetDrawableCollection(SerializedProperty property, ReorderableAttribute attrib = null, int id = -1, string backingListName = DefaultBackingListName) {
             if (property == null) {
                 return null;
             }
+
+            if (id == -1) {
+                id = GetListId(property);
+            }
+
+            if (attrib == null) {
+                attrib = new ReorderableAttribute();
+            }
+            
 
             ReorderableCollection collection = null;
             var backingList = property.FindPropertyRelative(backingListName);
@@ -73,28 +85,26 @@ namespace Malee.Editor {
             if (backingList == null || !backingList.isArray) return null;
             
             if (!Lists.TryGetValue(id, out collection)) {
-                if (attrib != null) {
-                    var icon = !string.IsNullOrEmpty(attrib.elementIconPath)
-                        ? AssetDatabase.GetCachedIcon(attrib.elementIconPath)
-                        : null;
+                var icon = !string.IsNullOrEmpty(attrib.elementIconPath)
+                    ? AssetDatabase.GetCachedIcon(attrib.elementIconPath)
+                    : null;
 
-                    var displayType = attrib.singleLine
-                        ? ReorderableCollection.ElementDisplayType.SingleLine
-                        : ReorderableCollection.ElementDisplayType.Auto;
+                var displayType = attrib.singleLine
+                    ? ReorderableCollection.ElementDisplayType.SingleLine
+                    : ReorderableCollection.ElementDisplayType.Auto;
 
-                    collection = new ReorderableCollection(backingList, attrib.add, attrib.remove, attrib.draggable, displayType,
-                        attrib.elementNameProperty, attrib.elementNameOverride, icon) { // TODO: FIX
-                        Paginate = attrib.paginate, PageSize = attrib.pageSize, sortable = attrib.sortable
-                    };
+                collection = new ReorderableCollection(backingList, attrib.add, attrib.remove, attrib.draggable,
+                    displayType,
+                    attrib.elementNameProperty, attrib.elementNameOverride, icon) {
+                    // TODO: FIX
+                    Paginate = attrib.paginate, PageSize = attrib.pageSize, sortable = attrib.sortable
+                };
 
-                    // handle surrogate if any
-                    if (attrib.surrogateType != null) {
-                        var callback = new SurrogateCallback(attrib.surrogateProperty);
-                        collection.surrogate = new ReorderableCollection.Surrogate(attrib.surrogateType, callback.SetReference);
-                    }
-                }
-                else {
-                    collection = new ReorderableCollection(backingList, true, true, true);
+                // handle surrogate if any
+                if (attrib.surrogateType != null) {
+                    var callback = new SurrogateCallback(attrib.surrogateProperty);
+                    collection.surrogate =
+                        new ReorderableCollection.Surrogate(attrib.surrogateType, callback.SetReference);
                 }
 
                 Lists.Add(id, collection);

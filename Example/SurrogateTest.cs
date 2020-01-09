@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Malee;
-using UnityEngine.Serialization;
+using ZeroVector.Common.Reorderable;
 
 public class SurrogateTest : MonoBehaviour {
 

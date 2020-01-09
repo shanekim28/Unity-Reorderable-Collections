@@ -1,46 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Malee.Editor;
 
-[CustomEditor(typeof(SurrogateTest))]
-public class SurrogateTestEditor : Editor {
+namespace ZeroVector.Common.Reorderable.Editor {
+    [CustomEditor(typeof(SurrogateTest))]
+    public class SurrogateTestEditor : UnityEditor.Editor {
+        private ReorderableCollection collection;
+        private SerializedProperty myClassArray;
 
-	private ReorderableCollection collection;
-	private SerializedProperty myClassArray;
+        private void OnEnable() {
+            //custom list with more complex surrogate functionality
 
-	private void OnEnable() {
+            collection = new ReorderableCollection(serializedObject.FindProperty("objects")) {
+                surrogate = new ReorderableCollection.Surrogate(typeof(GameObject), AppendObject)
+            };
 
-		//custom list with more complex surrogate functionalty
+            //myClassArray uses an auto surrogate property on the "ReorderableAttribute"
+            //it's limited to only setting a property field to the dragged object reference. Still handy!
 
-		collection = new ReorderableCollection(serializedObject.FindProperty("objects")) {
-			surrogate = new ReorderableCollection.Surrogate(typeof(GameObject), AppendObject)
-		};
+            myClassArray = serializedObject.FindProperty("myClassArray");
+        }
 
-		//myClassArray uses an auto surrogate property on the "ReorderableAttribute"
-		//it's limited to only setting a property field to the dragged object reference. Still handy!
+        public override void OnInspectorGUI() {
+            GUILayout.Label("Drag a GameObject onto the lists. Even though the list type is not a GameObject!");
 
-		myClassArray = serializedObject.FindProperty("myClassArray");
-	}
+            serializedObject.Update();
 
-	public override void OnInspectorGUI() {
+            collection.DoLayoutList();
+            EditorGUILayout.PropertyField(myClassArray);
 
-		GUILayout.Label("Drag a GameObject onto the lists. Even though the list type is not a GameObject!");
+            serializedObject.ApplyModifiedProperties();
+        }
 
-		serializedObject.Update();
+        private void AppendObject(SerializedProperty element, Object objectReference,
+            ReorderableCollection collection) {
+            //we can do more with a custom surrogate delegate :)
 
-		collection.DoLayoutList();
-		EditorGUILayout.PropertyField(myClassArray);
-
-		serializedObject.ApplyModifiedProperties();
-	}
-
-	private void AppendObject(SerializedProperty element, Object objectReference, ReorderableCollection collection) {
-
-		//we can do more with a custom surrogate delegate :)
-
-		element.FindPropertyRelative("gameObject").objectReferenceValue = objectReference;
-		element.FindPropertyRelative("name").stringValue = objectReference.name;
-	}
+            element.FindPropertyRelative("gameObject").objectReferenceValue = objectReference;
+            element.FindPropertyRelative("name").stringValue = objectReference.name;
+        }
+    }
 }
