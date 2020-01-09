@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: ScriptableObject Example 1
   m_EditorClassIdentifier: 
   dict:
-    serialisedKeys: []
-    serialisedVals: 
     items:
-    - 
-    - srt
+    - key: 1
+      value: 

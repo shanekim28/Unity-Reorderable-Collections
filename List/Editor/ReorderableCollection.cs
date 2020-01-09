@@ -9,7 +9,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Malee.Editor {
+namespace ZeroVector.Common.Reorderable.Editor {
     public class ReorderableCollection {
         private const float ElementEdgeTop = 1;
         private const float ElementEdgeBot = 3;
@@ -740,14 +740,11 @@ namespace Malee.Editor {
                 }
 
                 //draw elements, start from the bottom of the list as first elements are the ones selected, so should be drawn last
-
                 i = len;
-
                 while (--i > -1) {
                     var element = dragList[i];
 
                     //draw dragging elements last as the loop is backwards
-
                     if (element.selected) {
                         DrawElement(element.property, element.desiredRect, true, true);
                         continue;
@@ -756,16 +753,12 @@ namespace Malee.Editor {
                     //loop over selection and see what overlaps
                     //if dragging down we start from the bottom of the selection
                     //otherwise we start from the top. This helps to cover multiple selected objects
-
                     var elementRect = element.rect;
                     var elementIndex = element.startIndex;
-
                     var start = dragDirection > 0 ? sLen - 1 : 0;
                     var end = dragDirection > 0 ? -1 : sLen;
-
                     for (s = start; s != end; s -= dragDirection) {
                         var selected = dragList[s];
-
                         if (selected.Overlaps(elementRect, elementIndex, dragDirection)) {
                             elementRect.y -= selected.rect.height * dragDirection;
                             elementIndex += dragDirection;
@@ -773,11 +766,9 @@ namespace Malee.Editor {
                     }
 
                     //draw the element with the new rect
-
                     DrawElement(element.property, GetElementDrawRect(i, elementRect), false, false);
 
                     //reassign the element back into the dragList
-
                     element.desiredRect = elementRect;
                     dragList[i] = element;
                 }

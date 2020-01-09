@@ -1,51 +1,42 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using Malee;
 
-public class Example : MonoBehaviour {
+namespace ZeroVector.Common.Reorderable {
+    public class Example : MonoBehaviour {
+        public List<ExampleChild> list1;
 
-	public List<ExampleChild> list1;
+        [Reorderable] public ExampleChildList list2;
 
-	[Reorderable]
-	public ExampleChildList list2;
+        [Reorderable] public ExampleChildList list3;
 
-	[Reorderable]
-	public ExampleChildList list3;
+        [Reorderable] public StringList list4;
 
-	[Reorderable]
-	public StringList list4;
+        [Reorderable] public VectorList list5;
 
-	[Reorderable]
-	public VectorList list5;
+        [System.Serializable]
+        public class ExampleChild {
+            public string name;
+            public float value;
+            public ExampleEnum myEnum;
+            public LayerMask layerMask;
+            public long longValue;
+            public char charValue;
+            public byte byteValue;
 
-	[System.Serializable]
-	public class ExampleChild {
+            public enum ExampleEnum {
+                EnumValue1,
+                EnumValue2,
+                EnumValue3
+            }
+        }
 
-		public string name;
-		public float value;
-		public ExampleEnum myEnum;
-		public LayerMask layerMask;
-		public long longValue;
-		public char charValue;
-		public byte byteValue;
+        [System.Serializable]
+        public class ExampleChildList : ReorderableList<ExampleChild> { }
 
-		public enum ExampleEnum {
-			EnumValue1,
-			EnumValue2,
-			EnumValue3
-		}
-	}
+        [System.Serializable]
+        public class StringList : ReorderableList<string> { }
 
-	[System.Serializable]
-	public class ExampleChildList : ReorderableList<ExampleChild> {
-	}
-
-	[System.Serializable]
-	public class StringList : ReorderableList<string> {
-	}
-
-	[System.Serializable]
-	public class VectorList : ReorderableList<Vector4> {
-	}
+        [System.Serializable]
+        public class VectorList : ReorderableList<Vector4> { }
+    }
 }
