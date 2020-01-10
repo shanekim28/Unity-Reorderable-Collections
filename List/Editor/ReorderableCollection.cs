@@ -536,7 +536,8 @@ namespace ZeroVector.Common.Reorderable.Editor {
             titleRect.height -= 2f;
             titleRect.y++;
 
-            label = EditorGUI.BeginProperty(titleRect, label, list);
+            var newLabel = new GUIContent($"{label.text} [{this.list.arraySize}]"); // todo tie this to attribute
+            label = EditorGUI.BeginProperty(titleRect, newLabel, list);
 
             if (DrawHeaderCallback != null) {
                 DrawHeaderCallback(titleRect, label);
@@ -1016,7 +1017,7 @@ namespace ZeroVector.Common.Reorderable.Editor {
                 pagination.page = Mathf.Min(pages - 1, pagination.page + 1);
             }
 
-            //if we're allowed to control the page size manually, show an editor
+            // if we're allowed to control the page size manually, show an editor
 
             var useFixedPageSize = pagination.fixedPageSize > 0;
 
@@ -1043,8 +1044,12 @@ namespace ZeroVector.Common.Reorderable.Editor {
             EditorGUIUtility.labelWidth = labelWidth;
             EditorGUIUtility.SetIconSize(new Vector2(icon.width, icon.height));
 
+            // fix the invisible page size when using the normal "light" unity theme
+            var normalCol = GUI.contentColor;
+            GUI.contentColor = Color.black;
             var newPageSize = EditorGUI.DelayedIntField(pageSizeRect, Style.ListIcon,
                 useFixedPageSize ? pagination.fixedPageSize : pagination.customPageSize, style);
+            GUI.contentColor = normalCol;
 
             EditorGUIUtility.labelWidth = 0;
             EditorGUIUtility.SetIconSize(Vector2.zero);

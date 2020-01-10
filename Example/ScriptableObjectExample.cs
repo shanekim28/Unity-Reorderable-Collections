@@ -6,13 +6,15 @@ namespace ZeroVector.Common.Reorderable {
     [CreateAssetMenu(fileName = "New ScriptableObject Example", menuName = "ScriptableObject Example")]
     public class ScriptableObjectExample : ScriptableObject {
 
-        // This wii naturally not work, which is the whole point.
+        // This will naturally not work, which is the whole point.
         [Reorderable] public Vector3 t;
 
-        [SerializeField] // [Reorderable(paginate = true, pageSize = 0, elementNameProperty = "myString")]
+        [SerializeField]
+        [Reorderable(paginate = false)]
         private MyList list;
 
         [Space]
+        [Reorderable(paginate = true, pageSize = 0, elementNameProperty = "Value")]
         public MyDict dict;
 
         [Serializable]
@@ -33,8 +35,7 @@ namespace ZeroVector.Common.Reorderable {
                 return duplicateKey + 0.1f;
             }
         }
-
-
+        
         [Serializable]
         public class MyDictKVP : ReorderableDictionary<float, string, MyDictKVP>.KeyValuePair { }
     }
