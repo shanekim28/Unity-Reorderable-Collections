@@ -2,9 +2,7 @@
 
 An extended version of Chris Foulston's excellent [Unity-Reorderable-List](https://github.com/cfoulston/Unity-Reorderable-List) project.
 
-
-<todo add new screenshot>
-
+![image](https://user-images.githubusercontent.com/17273782/72189294-c817ce80-33fc-11ea-8c71-423fce6d2647.png)
 
 
 ## New Features
@@ -51,7 +49,7 @@ public class MyList : ReorderableList<MyObject> { }
 where `MyObject` is a struct containing three fields -- a bool, a float, and a string.
 
 ### Dictionaries?
-Dictionaries are a little more complicated, because we use more hacks here. For the one in the screenshot above, we have the following:
+Dictionaries are still easy, though just a bit more complicated, because need to take more things into account. For the one in the screenshot above, we have the following:
 
 ```csharp
 [Reorderable(paginate = true, pageSize = 0, elementNameProperty = "Value")]
@@ -73,7 +71,12 @@ So, what's going on here?
 * Dicts **must** also implement the `DeduplicateKey` method (takes and returns a `TKey`), which tells the dictionary how to mutate an existing key. _(Dictionaries must have unique keys, and it's smarter to force the implementation to do it instead of trying to come up with some "generic" way to do it.)_ In this case, adding a new element will increment the last-added key by 0.1.
 * You **must** also create a serialisable `TContainer` class that inherits from `ReorderableDictionary<TKey, TValue, TContainer>.KeyValuePair`. This class is used to draw the individual key-value pair elements. This is convoluted, yes, but allows you to create a custom property drawer for this class alone, and thus gives you full control over how your dictionaries look. You can put the special key-value pairs right in the base class to keep it slightly less cluttered.
 
-<todo add another example screenshot here>
+Here are some examples of Inspector-drawn dicts obtained using custom property drawers for value and key-value pair classes:
+
+![image](https://user-images.githubusercontent.com/17273782/72190260-5ee58a80-33ff-11ea-81ab-47a667ccc672.png)
+
+(These are from something secret I'm working on...)
+
 
 ## Supporting other collections
 You want to add a new collection type? That one's also pretty easy, though it takes a little work. To see how, just have a look at how `ReorderableDictionary` has been implemented here, which is, essentially, the following:
