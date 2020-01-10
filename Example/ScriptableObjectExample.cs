@@ -30,13 +30,15 @@ namespace ZeroVector.Common.Reorderable {
         private class MyList : ReorderableList<MyObject> { }
 
         [Serializable]
-        public class MyDict : ReorderableDictionary<float, string, MyDictKVP> {
+        public class MyDict : ReorderableDictionary<float, string, MyDict.KeyValuePair> {
             public override float DeduplicateKey(float duplicateKey) {
                 return duplicateKey + 0.1f;
             }
+            
+            // ReSharper disable once RedundantNameQualifier
+            [Serializable]
+            public new class KeyValuePair : ReorderableDictionary<float, string, KeyValuePair>.KeyValuePair { }
         }
-        
-        [Serializable]
-        public class MyDictKVP : ReorderableDictionary<float, string, MyDictKVP>.KeyValuePair { }
+
     }
 }

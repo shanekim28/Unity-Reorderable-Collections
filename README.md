@@ -36,7 +36,7 @@ Because having dictionaries in the Inspector is useful. For lists, you can happi
 This, however, is a unified solution whicn relies on simple rather than complicated approaches, and which won't have you running two different "reorderable collection drawers" in different namespaces. Naturally, all listed options are free, so feel free to pick and choose whichever you like most.
 
 ## Usage
-Unity is unable to serialise generic types, so it's always going to be necessary to create custom classes.  _Types not serialised by Unity can't be used for underlying collection types._
+Unity is unable to serialise generic types, so it's always going to be necessary to create custom classes.  _Types not serialised by Unity can't be used for underlying collection types._ Also, both examples listed here can be found in the ScriptableObjectExample present in the repo.
 
 ### Lists?
 Lists are easy. Simply make a new non-generic class that derives from `ReorderableList<T>`, just like you do with normal lists.
@@ -59,19 +59,19 @@ public MyDict dict;
 
 
 [Serializable]
-public class MyDict : ReorderableDictionary<float, string, MyDictKVP> {
+public class MyDict : ReorderableDictionary<float, string, MyDict.KeyValuePair> {
     public override float DeduplicateKey(float duplicateKey) {
         return duplicateKey + 0.1f;
     }
+    
+    [Serializable]
+    public new class KeyValuePair : ReorderableDictionary<float, string, KeyValuePair>.KeyValuePair { }
 }
-
-[Serializable]
-public class MyDictKVP : ReorderableDictionary<float, string, MyDictKVP>.KeyValuePair { }
 ```
 So, what's going on here?
 * Dicts **must** inherit from `ReorderableDictionary<TKey, TValue, TContainer>` and must be flagged serialisable as normal.
 * Dicts **must** also implement the `DeduplicateKey` method (takes and returns a `TKey`), which tells the dictionary how to mutate an existing key. _(Dictionaries must have unique keys, and it's smarter to force the implementation to do it instead of trying to come up with some "generic" way to do it.)_ In this case, adding a new element will increment the last-added key by 0.1.
-* You **must** also create a serialisable `TContainer` class that inherits from `ReorderableDictionary<TKey, TValue, TContainer>.KeyValuePair`. This class is used to draw the individual key-value pair elements. This is convoluted, yes, but allows you to create a custom property drawer for this class alone, and thus gives you full control over how your dictionaries look.
+* You **must** also create a serialisable `TContainer` class that inherits from `ReorderableDictionary<TKey, TValue, TContainer>.KeyValuePair`. This class is used to draw the individual key-value pair elements. This is convoluted, yes, but allows you to create a custom property drawer for this class alone, and thus gives you full control over how your dictionaries look. You can put the special key-value pairs right in the base class to keep it slightly less cluttered.
 
 <todo add another example screenshot here>
 

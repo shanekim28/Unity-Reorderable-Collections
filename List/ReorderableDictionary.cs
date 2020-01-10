@@ -67,9 +67,13 @@ namespace ZeroVector.Common.Reorderable {
         public abstract class KeyValuePair {
             // ReSharper disable InconsistentNaming
             public TKey Key;
-
             public TValue Value;
             // ReSharper restore InconsistentNaming
+            
+            // Allow implicit casting of real pairs to these pairs, just in case
+            public static implicit operator KeyValuePair<TKey, TValue>(KeyValuePair kvp) {
+                return new KeyValuePair<TKey, TValue>(kvp.Key, kvp.Value);
+            }
         }
 
         public void OnBeforeSerialize() {
@@ -86,7 +90,15 @@ namespace ZeroVector.Common.Reorderable {
             Clear(); // clear "this", the dictionary itself
             foreach (var item in items) {
                 var newKey = item.Key;
-                while (ContainsKey(newKey)) newKey = DeduplicateKey(newKey);
+                var i = 0;
+                while (ContainsKey(newKey) && i < 100) {
+                    newKey = DeduplicateKey(newKey);
+                    i++;
+                }
+                // If we didn't find a good value after 100 iterations, abort.
+                if (ContainsKey(newKey)) 
+                    throw new ArgumentException($"Attempted to add an existing key to the dictionary: " +
+                                                $"{newKey}. Make sure deduplication has been implemented properly.");
                 Add(newKey, item.Value);
             }
         }
@@ -199,9 +211,10 @@ namespace ZeroVector.Common.Reorderable {
 
         public bool ContainsKey(TKey key) => internalDict.ContainsKey(key);
         public bool ContainsValue(TValue value) => internalDict.ContainsValue(value);
-        public IEnumerator GetEnumerator() => internalDict.GetEnumerator();
-
-        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() =>
+        
+        
+        IEnumerator IEnumerable.GetEnumerator() => internalDict.GetEnumerator();
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() =>
             internalDict.GetEnumerator();
 
         [SecurityCritical]
