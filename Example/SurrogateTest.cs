@@ -6,7 +6,7 @@ public class SurrogateTest : MonoBehaviour {
 	[SerializeField]
 	private MyClass[] objects;
 
-	// [FormerlySerializedAs("myClassArray")] [SerializeField, Reorderable(surrogateType = typeof(GameObject), surrogateProperty = "gameObject")]
+	[SerializeField, Reorderable(surrogateType = typeof(GameObject), surrogateProperty = "gameObject")]
 	private MyClassList myClassList;
 
 	[System.Serializable]

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
 
@@ -30,9 +29,9 @@ namespace ZeroVector.Common.Reorderable {
     public abstract class ReorderableList<T> : Internal.BaseReorderableCollection,
         IList<T>, IList, IReadOnlyList<T> {
         //
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local, Unity.RedundantSerializeFieldAttribute
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local, Unity.RedundantSerializeFieldAttribute, MemberInitializerValueIgnored
         // Internal list that we expose the functionality of, and that we can serialise -- but must be named "items"
-        [SerializeField] private List<T> items;
+        [SerializeField] private List<T> items = new List<T>();
         
         public ReorderableList() => items = new List<T>();
 
@@ -59,7 +58,6 @@ namespace ZeroVector.Common.Reorderable {
         }
 
         public T this[int index] {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => items[index];
             set => items[index] = value;
         }

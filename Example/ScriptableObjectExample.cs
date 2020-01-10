@@ -5,7 +5,9 @@ using UnityEngine;
 namespace ZeroVector.Common.Reorderable {
     [CreateAssetMenu(fileName = "New ScriptableObject Example", menuName = "ScriptableObject Example")]
     public class ScriptableObjectExample : ScriptableObject {
-        
+
+        // This wii naturally not work, which is the whole point.
+        [Reorderable] public Vector3 t;
 
         [SerializeField] // [Reorderable(paginate = true, pageSize = 0, elementNameProperty = "myString")]
         private MyList list;

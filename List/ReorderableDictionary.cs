@@ -62,7 +62,7 @@ namespace ZeroVector.Common.Reorderable {
         private readonly Dictionary<TKey, TValue> internalDict;
 
         // This is the actual list that's gonna get drawn
-        [SerializeField] private List<TContainer> items;
+        [SerializeField] private List<TContainer> items = new List<TContainer>();
 
         public abstract class KeyValuePair {
             // ReSharper disable InconsistentNaming

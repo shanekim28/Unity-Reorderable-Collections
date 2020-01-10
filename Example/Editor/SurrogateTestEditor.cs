@@ -17,7 +17,7 @@ namespace ZeroVector.Common.Reorderable.Editor {
             //myClassArray uses an auto surrogate property on the "ReorderableAttribute"
             //it's limited to only setting a property field to the dragged object reference. Still handy!
 
-            myClassArray = serializedObject.FindProperty("myClassArray");
+            myClassArray = serializedObject.FindProperty("myClassList");
         }
 
         public override void OnInspectorGUI() {
