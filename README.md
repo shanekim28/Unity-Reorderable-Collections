@@ -29,7 +29,7 @@ _(This list has been copy-pasted from the source repo.)_
 
 
 ## Why use this one?
-Because having dictionaries in the Inspector is useful. For lists, you can happily use the [parent repo](https://github.com/cfoulston/Unity-Reorderable-List), but dictionaries are a different beast entirely. The only available solution which I can sincerely recommend is Rotary Heart's brilliant [Serialised Dictionary](https://assetstore.unity.com/packages/tools/utilities/serialized-dictionary-lite-110992), which is based on the same underlying principle but relies on a very special, complex property drawer instead (that is more difficult to customise if you want your dictionaries looking differently...).
+Because having dictionaries in the Inspector is useful. For lists, you can happily use the [parent repo](https://github.com/cfoulston/Unity-Reorderable-List), but dictionaries are a different beast entirely. The only available solution which I can sincerely recommend is Rotary Heart's brilliant [Serialised Dictionary](https://assetstore.unity.com/packages/tools/utilities/serialized-dictionary-lite-110992), which is based on the same base reorderable list repo but relies on a very special, complex property drawer instead, and that one's pretty difficult to customise, I can tell you that for a fact.
 
 This, however, is a unified solution whicn relies on simple rather than complicated approaches, and which won't have you running two different "reorderable collection drawers" in different namespaces. Naturally, all listed options are free, so feel free to pick and choose whichever you like most.
 
@@ -68,7 +68,7 @@ public class MyDict : ReorderableDictionary<float, string, MyDict.KeyValuePair> 
 ```
 So, what's going on here?
 * Dicts **must** inherit from `ReorderableDictionary<TKey, TValue, TContainer>` and must be flagged serialisable as normal.
-* Dicts **must** also implement the `DeduplicateKey` method (takes and returns a `TKey`), which tells the dictionary how to mutate an existing key. _(Dictionaries must have unique keys, and it's smarter to force the implementation to do it instead of trying to come up with some "generic" way to do it.)_ In this case, adding a new element will increment the last-added key by 0.1.
+* Dicts **must** also implement the `DeduplicateKey` method (takes and returns a `TKey`), which tells the dictionary how to mutate an existing key. _(Dictionaries must have unique keys, and it's smarter to force the implementation to do it instead of trying to come up with some "generic" way on the base level.)_ In this case, adding a new element will increment the last-added key by 0.1.
 * You **must** also create a serialisable `TContainer` class that inherits from `ReorderableDictionary<TKey, TValue, TContainer>.KeyValuePair`. This class is used to draw the individual key-value pair elements. This is convoluted, yes, but allows you to create a custom property drawer for this class alone, and thus gives you full control over how your dictionaries look. You can put the special key-value pairs right in the base class to keep it slightly less cluttered.
 
 Here are some examples of Inspector-drawn dicts obtained using custom property drawers for value and key-value pair classes:

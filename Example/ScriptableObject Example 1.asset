@@ -12,8 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d42752ae62b22b47aef2032ceee5689, type: 3}
   m_Name: ScriptableObject Example 1
   m_EditorClassIdentifier: 
+  t: {x: 0, y: 0, z: 0}
   list:
     items:
+    - myBool: 0
+      myValue: 0
+      myString: 
+    - myBool: 0
+      myValue: 0
+      myString: 
     - myBool: 0
       myValue: 0
       myString: 
@@ -21,9 +28,11 @@ MonoBehaviour:
     items:
     - Key: 0
       Value: 
-    - Key: 0.1
-      Value: 
     - Key: 0.2
       Value: 
     - Key: 0.3
+      Value: 
+    - Key: 0.4
+      Value: 
+    - Key: 0.5
       Value: 
