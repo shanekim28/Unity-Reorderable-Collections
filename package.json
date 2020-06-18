@@ -1,0 +1,13 @@
+{
+    "name": "com.lumosx.reorderablecollections",
+    "author": "Lumos",
+    "displayName": "Reorderable Collections",
+    "version": "1.0.1",
+    "unity": "2018.1",
+    "keywords": [
+        "unity",
+        "editor",
+        "list"
+    ],
+    "description": "Editor extension for managing the ordering of Collections contents"
+}
